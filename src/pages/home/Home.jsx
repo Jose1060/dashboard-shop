@@ -4,6 +4,7 @@ import "./home.css";
 import { salesData } from "../../dummyData";
 import WidgetSm from "../../components/widgetSm/WidgetSm";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
+import React from "react";
 
 export default function Home() {
 	return (

@@ -1,12 +1,27 @@
+import React, { useEffect } from "react";
 import "./productList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase-config";
 
 export default function ProductList() {
 	const [data, setData] = useState(productRows);
+	const [products, serProducts] = useState([]);
+	const productsCollectionRef = collection(db, "Productos");
+
+	useEffect(() => {
+		const getProducts = async () => {
+			const dataProduct = await getDocs(productsCollectionRef);
+			serProducts(
+				dataProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+			);
+		};
+		getProducts();
+	});
 
 	const handleDelete = (id) => {
 		setData(data.filter((item) => item.id !== id));
@@ -15,26 +30,26 @@ export default function ProductList() {
 	const columns = [
 		{ field: "id", headerName: "ID", width: 90 },
 		{
-			field: "product",
-			headerName: "Product",
+			field: "nombre",
+			headerName: "Nombre",
 			width: 200,
-			renderCell: (params) => {
-				return (
-					<div className="productListItem">
-						<img className="productListImg" src={params.row.img} alt="" />
-						{params.row.name}
-					</div>
-				);
-			},
+			//renderCell: (params) => {
+			//	return (
+			//		<div className="productListItem">
+			//			<img className="productListImg" src={params.row.img} alt="" />
+			//			{params.row.name}
+			//		</div>
+			//	);
+			//},
 		},
-		{ field: "stock", headerName: "Stock", width: 200 },
+		{ field: "Stock", headerName: "Stock", width: 120 },
 		{
-			field: "status",
-			headerName: "Status",
+			field: "Descripcion",
+			headerName: "Descripcion",
 			width: 120,
 		},
 		{
-			field: "price",
+			field: "Precio",
 			headerName: "Price",
 			width: 160,
 		},
@@ -61,7 +76,7 @@ export default function ProductList() {
 	return (
 		<div className="productList">
 			<DataGrid
-				rows={data}
+				rows={products}
 				disableSelectionOnClick
 				columns={columns}
 				pageSize={8}

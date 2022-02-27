@@ -1,10 +1,11 @@
+import React from "react";
 import "./userList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { userRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { db } from "../../firabase-config";
+import { db } from "../../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 
 export default function UserList() {
